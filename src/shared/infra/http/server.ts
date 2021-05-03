@@ -4,11 +4,11 @@ import 'express-async-errors';
 import routes from './routes';
 import 'reflect-metadata';
 
-import './database';
+import '../typeorm';
 
-import uploadConfig from './config/upload';
+import uploadConfig from '../../../config/upload';
 
-import AppError from './errors/AppError';
+import AppError from '../../errors/AppError';
 
 const app = express();
 const port = 3333;
