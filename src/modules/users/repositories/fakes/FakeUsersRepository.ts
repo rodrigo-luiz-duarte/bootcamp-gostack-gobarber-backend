@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import ICreateUserDTO from '@modules/users/dto/ICreateUserDTO';
+import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 import IUsersRepository from '../IUsersRepository';
 
