@@ -1,5 +1,6 @@
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
-import { getRepository, Repository } from 'typeorm';
+import IListAllUsersDTO from '@modules/users/dtos/IListAllUsersDTO';
+import { getRepository, Repository, Not } from 'typeorm';
 
 import IUsersRepository from '../../../repositories/IUsersRepository';
 
@@ -34,9 +35,20 @@ class UsersRepository implements IUsersRepository {
         return user;
     }
 
-    public async find(): Promise<User[]> {
-        const Users = await this.ormRepository.find();
-        return Users;
+    public async findAll({ exceptUserId }: IListAllUsersDTO): Promise<User[]> {
+        let users: User[] = [];
+
+        if (exceptUserId) {
+            users = await this.ormRepository.find({
+                where: {
+                    id: Not(exceptUserId),
+                },
+            });
+        } else {
+            users = await this.ormRepository.find();
+        }
+
+        return users;
     }
 }
 
