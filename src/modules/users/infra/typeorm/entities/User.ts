@@ -6,17 +6,10 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
-export interface UserWithoutPassword {
-    id: string;
-    name: string;
-    email: string;
-    createdAt: Date;
-    updatedAt: Date;
-    avatar: string;
-}
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity('users')
-class User implements UserWithoutPassword {
+class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -27,6 +20,7 @@ class User implements UserWithoutPassword {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @CreateDateColumn({ name: 'created_at' })
@@ -36,19 +30,14 @@ class User implements UserWithoutPassword {
     updatedAt: Date;
 
     @Column()
+    @Exclude()
     avatar: string;
 
-    public getUserWithoutPassword(): UserWithoutPassword {
-        const userWithoutPassword = {
-            id: this.id,
-            name: this.name,
-            email: this.email,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt,
-            avatar: this.avatar,
-        };
-
-        return userWithoutPassword;
+    @Expose({ name: 'avatarUrl' })
+    getAvatarUrl(): string | null {
+        return this.avatar
+            ? `${process.env.APP_API_URL}/files/${this.avatar}`
+            : null;
     }
 }
 
