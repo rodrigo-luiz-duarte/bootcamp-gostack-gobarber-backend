@@ -1,5 +1,6 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import { inject, injectable } from 'tsyringe';
 
 interface IRequest {
@@ -11,12 +12,23 @@ class ListProvidersService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider,
     ) {}
 
     public async execute({ userId }: IRequest): Promise<User[]> {
-        const providers = await this.usersRepository.findAll({
-            exceptUserId: userId,
-        });
+        const cacheKey = `providers-list:${userId}`;
+
+        let providers = await this.cacheProvider.getValue<User[]>(cacheKey);
+
+        if (!providers) {
+            providers = await this.usersRepository.findAll({
+                exceptUserId: userId,
+            });
+
+            await this.cacheProvider.save<User[]>(cacheKey, providers);
+        }
 
         return providers;
     }
