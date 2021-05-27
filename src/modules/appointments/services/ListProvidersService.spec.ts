@@ -1,16 +1,21 @@
-import userProfileRouter from '@modules/users/infra/http/routes/profile.routes';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
-import AppError from '@shared/errors/AppError';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ListProvidersService from './ListProvidersService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let listProvidersService: ListProvidersService;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('UpdateUserProfile', () => {
     beforeEach(() => {
         fakeUsersRepository = new FakeUsersRepository();
 
-        listProvidersService = new ListProvidersService(fakeUsersRepository);
+        fakeCacheProvider = new FakeCacheProvider();
+
+        listProvidersService = new ListProvidersService(
+            fakeUsersRepository,
+            fakeCacheProvider,
+        );
     });
 
     it('should be able to list the providers', async () => {

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import User, { UserWithoutPassword } from '../infra/typeorm/entities/User';
+import User from '../infra/typeorm/entities/User';
 
 import AppError from '../../../shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
