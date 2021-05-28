@@ -1,6 +1,7 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 import { inject, injectable } from 'tsyringe';
 
 interface IRequest {
@@ -27,7 +28,10 @@ class ListProvidersService {
                 exceptUserId: userId,
             });
 
-            await this.cacheProvider.save<User[]>(cacheKey, providers);
+            await this.cacheProvider.save<User[]>(
+                cacheKey,
+                classToClass(providers),
+            );
         }
 
         return providers;
