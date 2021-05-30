@@ -25,6 +25,8 @@ export default class UserProfileController {
 
         const { name, email, oldPassword, password } = request.body;
 
+        console.log('body', request.body);
+
         const updateUserProfileService = container.resolve(
             UpdateUserProfileService,
         );
