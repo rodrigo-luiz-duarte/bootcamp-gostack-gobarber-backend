@@ -51,6 +51,7 @@ class AppointmentRepository implements IAppointmentsRepository {
     ): Promise<Appointment | undefined> {
         const findAppointment = await this.ormRepository.findOne({
             where: { date, providerId },
+            order: { date: 'ASC' },
         });
 
         return findAppointment;
